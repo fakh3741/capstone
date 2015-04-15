@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 include_once('/var/www/html/capstone/lib.php'); 
 include_once('header.php');
 isdigit($s);
@@ -7,6 +7,12 @@ isdigit($s);
 switch($s){
 case 0;
 default:
+if($_SESSION['user']=="owner"){
+        header("Location: profile.php");
+}
+if($_SESSION['user']=="user"){
+        header("Location: main.php");
+}
     echo"
     <section id=\"intro\" class=\"container\">
 							<div class=\"row\">
@@ -79,7 +85,7 @@ case "1":
 
 // Add new users    
 case "2":
-    if (isset($_SESSION['owner'])) {
+    if ($_SESSION['user']=="owner") {
     echo " 
     <article class=\"box post\">
         <header>
@@ -89,10 +95,10 @@ case "2":
         <p> 
             <table style=\"width:100%\">
 	<form method=post action=add.php?s=2 id=\"newuser\">
-    <tr><td> User name: </td> <td> <input type=\"text\" id=\"name\" name=\"name\"> </td></tr>
-    <tr><td> Email address: </td> <td> <input type=\"text\" id=\"useremail\" name=\"useremail\"> </td></tr>
-    <tr><td> Password </td> <td> <input type=\"password\" id=\"password\" name=\"password\"> </td></tr>
-    <tr><td> Phone number: </td> <td> <input type=\"text\" id=\"phone\" name=\"phone\"> </td></tr>
+    <tr><td> User name: </td> <td> <input type=\"text\" id=\"name\" size=\"50\" name=\"name\"> </td></tr>
+    <tr><td> Email address: </td> <td> <input type=\"text\" id=\"useremail\" size=\"50\" name=\"useremail\"> </td></tr>
+    <tr><td> Password </td> <td> <input type=\"password\" id=\"password\" size=\"50\" name=\"password\"> </td></tr>
+    <tr><td> Phone number: </td> <td> <input type=\"text\" id=\"phone\" size=\"50\" name=\"phone\"> </td></tr>
     <tr><td> Location tracking: </td> <td> <select name=tracking form=\"newuser\"> 
                                             <option value=\"yes\">Yes</option>
                                             <option value=\"no\">No</option>
@@ -109,7 +115,7 @@ case "2":
                                             <option value=\"phone\">Phone</option>
                                             <option value=\"both\">Email&Phone</option>
                                             </select></td></tr>
-    <tr><td></td><td><input type=\"submit\" value=\"Register\"></td></tr>
+    <tr><td></td><td><a href=\"profile.php\" class=\"button\">Back</a>  <input type=\"submit\" value=\"Register\"></td></tr>
     </form>
     </table>
         </p>						
@@ -133,6 +139,12 @@ case "2":
     }
         break;
 	
+case "100":
+	session_unset();
+        session_destroy();
+        header("Location: index.php");
+        break;
+
 }
 
 include_once('footer.php');

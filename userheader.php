@@ -29,12 +29,12 @@
 					<!-- Nav -->
 						<nav id="nav">
 							<ul>
-								<li class="current"><a href="index.php">Home</a></li>
+								<li class="current"><a href="main.php">Home</a></li>
 								<li>
 									<a href="location.php">Location tracking</a>
 								</li>
 								<li><a href="heart.php">Heart pulse</a></li>
-								<li><a href="logout.php">Logout</a></li>
+								<li><a href="index.php?s=100">Logout</a></li>
 							</ul>
 						</nav>
 

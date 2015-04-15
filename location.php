@@ -2,10 +2,14 @@
 
 session_start();
 include_once('lib.php'); 
-include_once('header.php');
-//connect($db);
+connect($db);
 isdigit($s);
-
+if($_SESSION['user']=="owner"){
+	include_once('ownerheader.php');
+}
+if($_SESSION['user']=="user"){
+	include_once('userheader.php');
+}
 switch($s){
 case 0;
 default:

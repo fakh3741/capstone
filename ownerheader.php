@@ -29,10 +29,7 @@
 					<!-- Nav -->
 						<nav id="nav">
 							<ul>
-								<li class="current"><a href="index.php">Home</a></li>
-								<li>
-									<a href="profile.php">Profile</a>
-								</li>
+								<li class="current"><a href="profile.php">Home</a></li>
 								<li><a href="index.php?s=2">Add users</a></li>
 								<li>
                                     <a href="">Tracking</a>
@@ -42,7 +39,7 @@
 										<li><a href="log.php">Event log</a></li>
 									</ul>
                                 </li>
-								<li><a href="logout.php">Logout</a></li>
+								<li><a href="index.php?s=100">Logout</a></li>
 							</ul>
 						</nav>
 

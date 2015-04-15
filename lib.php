@@ -18,7 +18,7 @@ function connect(&$db){
         print "Error connecting to DB: " . mysql_error();
         exit;
     }
-    mysql_select_db($db_name, $db);
+    //mysql_select_db($db_name, $db);
     }
 
 function isdigit($n) {
@@ -66,6 +66,7 @@ function owner_authenticate($db, $postEmail, $postPass){
                         $_SESSION['email']=$email;
                         $_SESSION['authenticated']="yes";
                         $_SESSION['ip']=$_SERVER['REMOTE_ADDR'];
+			$_SESSION['user']="owner";
                         header("Location: profile.php");
                 }
                 else{
@@ -86,24 +87,37 @@ function user_authenticate($db, $postEmail, $postPass){
                 logout();
         }
     #Select salt and password, see if we match
-        $query="select password, salt from users where email=?";
+        $query="SELECT userid, ownerid, name, password, phone, tracking, heart, emergency, salt from users where email=?";
         if ($stmt = mysqli_prepare($db, $query)) {
                 mysqli_stmt_bind_param($stmt, "s", $postEmail);
                 mysqli_stmt_execute($stmt);
-                mysqli_stmt_bind_result($stmt, $password, $salt);
+                mysqli_stmt_bind_result($stmt, $userid, $owner, $name, $password, $phone, $tracking, $heart, $emergency, $salt);
                 while(mysqli_stmt_fetch($stmt)) {
-                    $password=$password;
-                    $salt=$salt;               
+			$userid=$userid;
+			$owner=$owner;
+			$name=$name;
+                	$password=$password;
+			$phone=$phone;
+			$tracking=$tracking;
+			$heart=$heart;
+			$emergency=$emergency;
+                	$salt=$salt;               
                 }
                 mysqli_stmt_close($stmt);
                 $epass=hash('sha256', $postPass.$salt);
             
-                if ($epass == $password) {
-                        $_SESSION['ownerid']=$ownerid;
-                        $_SESSION['name']=$ownername;
-                        $_SESSION['email']=$email;
+                if ($postPass == $password) {
+                        $_SESSION['ownerid']=$owner;
+			$_SESSION['userid']=$userid;
+                        $_SESSION['name']=$name;
+                        $_SESSION['email']=$postEmail;
+			$_SESSION['phone']=$phone;
+			$_SESSION['tracking']=$tracking;
+			$_SESSION['heart']=$heart;
+			$_SESSION['emergency']=$emergency;
                         $_SESSION['authenticated']="yes";
                         $_SESSION['ip']=$_SERVER['REMOTE_ADDR'];
+			$_SESSION['user']="user";
                         header("Location: main.php");
                 }
                 else{
@@ -120,7 +134,7 @@ isset ($_REQUEST['s'])?$s=strip_tags($_REQUEST['s']):$s="";
 isset ($_REQUEST['ownerid'])?$ownerid=strip_tags($_REQUEST['ownerid']):$ownerid="";
 isset ($_REQUEST['userid'])?$userid=strip_tags($_REQUEST['userid']):$userid="";
 isset ($_REQUEST['name'])?$name=strip_tags($_REQUEST['name']):$name="";
-isset ($_REQUEST['useremail'])?$useremail=strip_tags($_REQUEST['username']):$username="";
+isset ($_REQUEST['useremail'])?$useremail=strip_tags($_REQUEST['useremail']):$useremail="";
 isset ($_REQUEST['password'])?$password=strip_tags($_REQUEST['password']):$password="";
 isset ($_REQUEST['mac'])?$mac=strip_tags($_REQUEST['mac']):$mac="";
 isset ($_REQUEST['phone'])?$phone=strip_tags($_REQUEST['phone']):$phone="";
@@ -131,6 +145,14 @@ isset ($_REQUEST['emergency'])?$emergency=strip_tags($_REQUEST['emergency']):$em
 isset ($_REQUEST['pwd'])?$pwd=strip_tags($_REQUEST['pwd']):$pwd="";
 isset ($_REQUEST['email'])?$email=strip_tags($_REQUEST['email']):$email="";
 isset ($_REQUEST['owneremail'])?$owneremail=strip_tags($_REQUEST['owneremail']):$owneremail="";
+isset ($_REQUEST['usersnumber'])?$usersnumber=strip_tags($_REQUEST['usersnumber']):$usersnumber="";
+isset ($_REQUEST['profilestatus'])?$profilestatus=strip_tags($_REQUEST['profilestatus']):$profilestatus="";
+
+isset ($_REQUEST['maxrate'])?$maxrate=strip_tags($_REQUEST['maxrate']):$maxrate="";
+isset ($_REQUEST['minrate'])?$minrate=strip_tags($_REQUEST['minrate']):$minrate="";
+isset ($_REQUEST['emergencyalert'])?$emergencyalert=strip_tags($_REQUEST['emergencyalert']):$emergencyalert="";
+isset ($_REQUEST['heartalert'])?$heartalert=strip_tags($_REQUEST['heartalert']):$heartalert="";
+isset ($_REQUEST['lightalert'])?$lightalert=strip_tags($_REQUEST['lightalert']):$lightalert="";
 
 ?>
 

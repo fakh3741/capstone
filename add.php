@@ -66,7 +66,7 @@ case "1":
 //Adding new user
 case "2":
     //check if the user is an owner
-    if (isset($_SESSION['owner'])) {
+    if ($_SESSION['user']=="owner") {
         $ownerid= $_SESSION['ownerid'];
         $ownerid=mysqli_real_escape_string($db , $ownerid);
 	$name=mysqli_real_escape_string($db , $name);
@@ -76,12 +76,12 @@ case "2":
         $tracking=mysqli_real_escape_string($db, $tracking);
         $heart=mysqli_real_escape_string($db, $heart);
         $emergency=mysqli_real_escape_string($db, $emergency);
-                                        $salt=substr(str_shuffle("uhghgjriedkdjfnghjgjj658958686jgjfkrir94u6556j5j5jfjfu5"), 0 , 10);
-    $salthash = hash('sha256', $salt);
-    $hashpwd=hash('sha256', $password.$salthash);
+        $salt=substr(str_shuffle("uhghgjriedkdjfnghjgjj658958686jfu5"), 0 , 10);
+    	$salthash = hash('sha256', $salt);
+    	$hashpwd=hash('sha256', $password.$salthash);
         
 	   if($stmt=mysqli_prepare($db,"INSERT INTO users set userid='', ownerid=?, name=?, email=?, password=?, salt=?, phone=?, tracking=?, heart=?, emergency=?")) {
-		mysqli_stmt_bind_param($stmt,"sssssssss", $ownerid, $name, $useremail, $hashpwd, $salthash, $phone, $tracking, $heart, $emergency);
+		mysqli_stmt_bind_param($stmt,"sssssssss", $ownerid, $name, $useremail, $password, $salthash, $phone, $tracking, $heart, $emergency);
 		mysqli_stmt_execute($stmt);
 		mysqli_stmt_close($stmt);
        }
@@ -106,7 +106,7 @@ case "2":
         </header>
         <p> 
         <center>
-        The user $name has been added to your profile.
+        The user $name has been added to your profile. <br>
         An email was sent to the email address provided.
         <br><br>
         <a href=\"index.php?s=2\" class=\"button\">Add a nother user</a>
